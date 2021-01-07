@@ -1,0 +1,71 @@
+{
+  "name": "loopback4-monorepo-monorepo",
+  "description": "Monorepo for LoopBack applications",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "version": "0.0.1",
+  "engines": {
+    "node": ">=14.15.0 <15.0.0"
+  },
+  "author": "",
+  "devDependencies": {
+    "@commitlint/cli": "^11.0.0",
+    "@commitlint/config-conventional": "^11.0.0",
+    "@commitlint/travis-cli": "^11.0.0",
+    "@loopback/build": "^6.2.3",
+    "@loopback/eslint-config": "^10.0.0",
+    "@loopback/monorepo": "^0.1.2",
+    "cz-conventional-changelog": "^3.3.0",
+    "eslint": "^7.9.0",
+    "husky": "^4.3.0",
+    "lerna": "^3.22.1",
+    "lint-staged": "^10.3.0"
+  },
+  "scripts": {
+    "bootstrap": "lerna bootstrap",
+    "postinstall": "npm run -s bootstrap && npm run -s update-ts-project-refs",
+    "prerelease": "npm run build:full && cross-env CI=1 npm run mocha && npm run lint",
+    "release": "cross-env CI=1 lerna version && lerna publish from-git --yes",
+    "update-ts-project-refs": "lb-update-ts-project-refs",
+    "update-package-locks": "lb-rebuild-package-locks",
+    "update-package-deps": "lb-update-package-deps",
+    "lint": "npm run prettier:check && npm run eslint",
+    "lint:fix": "npm run eslint:fix && npm run prettier:fix",
+    "eslint": "lb-eslint --report-unused-disable-directives --cache .",
+    "eslint:fix": "npm run eslint -- --fix",
+    "prettier:cli": "lb-prettier \"**/*.ts\" \"**/*.js\" \"**/*.md\" --loglevel warn",
+    "prettier:check": "npm run prettier:cli -- --check",
+    "prettier:fix": "npm run prettier:cli -- --write",
+    "build": "lb-tsc -b",
+    "build:full": "CI=true npm ci && npm run clean && npm run build",
+    "clean": "lerna run clean",
+    "pretest": "npm run clean && npm run build",
+    "test": "lb-mocha --timeout 15000 --allow-console-logs \"packages/*/dist/__tests__/**/*.js\"",
+    "posttest": "npm run lint",
+    "docker:build": "./bin/build-docker-images.sh"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "copyright.owner": "",
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{ts,js}": [
+      "lb-prettier --write",
+      "lb-eslint --fix --report-unused-disable-directives --cache"
+    ],
+    "*.md": [
+      "lb-prettier --write"
+    ]
+  }
+}

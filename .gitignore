@@ -1,0 +1,18 @@
+lerna-debug.log
+node_modules
+npm-debug.log
+.DS_Store
+coverage
+.nyc_output
+/dist
+packages/*/dist
+.sandbox
+*.tsbuildinfo
+
+# ESLint cache
+.eslintcache
+
+/monetization.iml
+
+# This file will be copied from a template
+.dockerignore
