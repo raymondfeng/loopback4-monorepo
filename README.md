@@ -1,4 +1,4 @@
-# apiconnect-monetization-monorepo
+# loopback4-monorepo
 
 This is the [lerna](https://github.com/lerna/lerna) monorepo to manage multiple
 packages for a large-scale LoopBack 4 application.
